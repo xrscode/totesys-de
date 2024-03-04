@@ -30,3 +30,17 @@ jobs:
                 aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
                 aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
             
+            - name: Deploy Terraform
+              uses: hashicorp/setup-terraform@v3
+            
+            - name: Terraform Init
+              run: terraform init
+
+            - name: Terraform Plan
+              run: terraform plan
+
+            - name: Terraform apply
+              run: terraform apply -auto-approve
+
+
+            
