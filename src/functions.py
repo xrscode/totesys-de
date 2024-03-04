@@ -2,7 +2,7 @@ import boto3
 import json
 
 
-def read_bucket_names():
+def get_bucket_names():
     """
     Args:
     ------
@@ -18,7 +18,7 @@ def read_bucket_names():
     response = s3.get_object(Bucket=bucket_name, Key=object_key)
     data = json.loads(response['Body'].read().decode(
         'utf-8'))['resources']
-    bucket_obj = {'ingestion': None, 'process': None, 'storage': None}
+    bucket_obj = {}
     for instance in data:
         try:
             bucket_name = instance['instances'][0]['attributes']['bucket']
