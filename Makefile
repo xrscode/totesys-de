@@ -6,7 +6,7 @@
 
 PROJECT_NAME = totesys-de 
 REGION = eu-west-2
-PYTHON_INTERPRETER = python
+PYTHON_INTERPRETER = python3.12
 WD=$(shell pwd)
 PYTHONPATH=${WD}
 SHELL := /bin/bash
