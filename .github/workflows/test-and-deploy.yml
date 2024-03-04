@@ -34,7 +34,6 @@ jobs:
               uses: hashicorp/setup-terraform@v3
             
             - name: Terraform Init
-              working-directory: tf-state
               run: terraform init
 
             - name: Terraform Plan
