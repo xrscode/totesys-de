@@ -176,10 +176,16 @@ def create_path_add_file(file, bucket_name=bucket_names['ingestion']):
 
     # Check that File is a VALID JSON file.
     try:
-        json.loads(file)
+        dict_values = json.loads(file).values()
         print(f"Valid JSON string provided.  Will add to {bucket_name}")
     except (json.JSONDecodeError, TypeError):
         raise ValueError("File is not valid JSON format.")
+
+    # Check JSON not empty
+    # If JSON totaly empty, returns.
+    if all(len(value) == 0 for value in dict_values):
+        print('No new values detected.  Update unecessary')
+        return f"Update not necessary."
 
     s3 = boto3.client('s3')
     current_time = datetime.now()
@@ -216,4 +222,8 @@ def create_path_add_file(file, bucket_name=bucket_names['ingestion']):
     s3.put_object(Body=file, Bucket=bucket_name, Key=file_name)
     # Update AWS Time
     # update_aws_time(datetime.now())
+    print(f"File path created: {date_str}.  File added!")
     return f"File path created: {date_str}.  File added!"
+
+
+create_path_add_file(all_data())
