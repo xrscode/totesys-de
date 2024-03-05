@@ -15,3 +15,10 @@ terraform {
       region = "eu-west-2"
     }
 }
+
+# Set Default Time
+resource "aws_ssm_parameter" "starting time" {
+    name  = "/time"
+    type  = "String"
+    value = "1900, 2, 20, 18, 14, 14"
+}
