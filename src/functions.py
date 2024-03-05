@@ -131,7 +131,7 @@ def all_data():
     con.close()
     # Convert into a JSON string:
     json_str = json.dumps(data, default=str, indent=2)
-    update_aws_time(datetime.now())
+    # update_aws_time(datetime.now())
     return json_str
 
 
@@ -221,6 +221,6 @@ def create_path_add_file(file, bucket_name=bucket_names['ingestion']):
     # Add file to the file location created earlier.
     s3.put_object(Body=file, Bucket=bucket_name, Key=file_name)
     # Update AWS Time
-    # update_aws_time(datetime.now())
+    update_aws_time(datetime.now())
     print(f"File path created: {date_str}.  File added!")
     return f"File path created: {date_str}.  File added!"
