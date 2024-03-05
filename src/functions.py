@@ -10,7 +10,12 @@ def get_bucket_names():
 
     Returns:
     ------
-    Object containing names of S3 buckets.
+    Object containing names of S3 buckets. Example:
+
+    {'ingestion': 'ingestion-20240304201826545600000001', 
+    'process': 'process-20240304201826547200000003',
+    'storage': 'storage-20240304201826546800000002'}
+
     """
     s3 = boto3.client('s3')
     bucket_name = "terraform-xrs"
@@ -31,4 +36,11 @@ def get_bucket_names():
             bucket_obj['process'] = bucket_name
         elif bucket_name[0:7] == 'storage':
             bucket_obj['storage'] = bucket_name
-    return bucket_obj
+        return bucket_obj
+
+
+def get_aws_time():
+    pass
+
+
+print(get_bucket_names())
