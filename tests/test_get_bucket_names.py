@@ -9,6 +9,11 @@ def test_returns_a_dictionary():
     invoke = isinstance(get_bucket_names(), dict)
     assert invoke == True
 
+# Get Time
+# def test_returns_a_datetime_object()
+#     invoke = isinstance(aws_time(), datetime)
+#     assert invoke == True
+
 
 # @patch('src.functions.boto3.client')
 # def test_returns_correct_dictionary(mock_boto3_client):
