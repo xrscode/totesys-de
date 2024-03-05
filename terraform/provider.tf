@@ -20,5 +20,5 @@ terraform {
 resource "aws_ssm_parameter" "set_start_date_1970" {
     name  = "/time"
     type  = "String"
-    value = "1900, 2, 20, 18, 14, 14"
+    value = "1900-02-20 18:14:14.000000"
 }

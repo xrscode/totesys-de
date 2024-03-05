@@ -44,3 +44,6 @@ def aws_time():
     client = boto3.client('ssm')
     str = client.get_parameter(Name='/time')['Parameter']['Value']
     return datetime.strptime(str, '%Y-%m-%d %H:%M:%S.%f')
+
+
+print(aws_time())
