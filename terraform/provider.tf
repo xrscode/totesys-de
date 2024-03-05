@@ -17,7 +17,7 @@ terraform {
 }
 
 # Set Default Time
-resource "aws_ssm_parameter" "starting time" {
+resource "aws_ssm_parameter" "set_start_date_1970" {
     name  = "/time"
     type  = "String"
     value = "1900, 2, 20, 18, 14, 14"
