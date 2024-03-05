@@ -149,16 +149,16 @@ def create_path_add_file(file, bucket_name=bucket_names['ingestion']):
     - `str`
     Returns a message: "File path created: {date_str}.  File added!"
 
-    This function creates a file path in an S3 bucket and 
+    This function creates a file path in an S3 bucket and
     adds a json to the created file path.
 
-    In order to maintain a clean file structure within 
+    In order to maintain a clean file structure within
     the S3 bucket, this function will try to create a unique file path.
-    The file path is set to the time the function is 
+    The file path is set to the time the function is
     run and will create a file path in this format:
     Year/Month/Date/Hour
     2023/2/16/12
-    This assumes that the function was run about 
+    This assumes that the function was run about
     12pm on the 16th February 2023.
     If the file path already exists, it will not create a new file path.
 
@@ -168,8 +168,8 @@ def create_path_add_file(file, bucket_name=bucket_names['ingestion']):
 
     If the file is NOT a json file, it will raise a value error.
 
-    If the file IS a json file, it will create a file path 
-    (assuming it does not exist already) and place 
+    If the file IS a json file, it will create a file path
+    (assuming it does not exist already) and place
     the json file in the final folder.
 
     """
@@ -177,15 +177,15 @@ def create_path_add_file(file, bucket_name=bucket_names['ingestion']):
     # Check that File is a VALID JSON file.
     try:
         dict_values = json.loads(file).values()
-        print(f"Valid JSON string provided.  Will add to {bucket_name}")
+        print("Valid JSON provided.  Checking for values...")
     except (json.JSONDecodeError, TypeError):
         raise ValueError("File is not valid JSON format.")
 
     # Check JSON not empty
     # If JSON totaly empty, returns.
     if all(len(value) == 0 for value in dict_values):
-        print('No new values detected.  Update unecessary')
-        return f"Update not necessary."
+        print('No new values detected.  Update unnecessary')
+        return None
 
     s3 = boto3.client('s3')
     current_time = datetime.now()
@@ -224,6 +224,3 @@ def create_path_add_file(file, bucket_name=bucket_names['ingestion']):
     # update_aws_time(datetime.now())
     print(f"File path created: {date_str}.  File added!")
     return f"File path created: {date_str}.  File added!"
-
-
-create_path_add_file(all_data())
