@@ -8,6 +8,6 @@ data "archive_file" "lambda_layer_functions_zip"{
 # Define the AWS Lambda layer
 resource "aws_lambda_layer_version" "layer_one" {
     filename = data.archive_file.lambda_layer_functions_zip.output_path
-    layer_name = "layer 1"
+    layer_name = "first_layer"
     compatible_runtimes = ["python3.12"]
 }
