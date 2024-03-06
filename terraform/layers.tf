@@ -2,7 +2,7 @@
 data "archive_file" "lambda_layer_functions_zip"{
     type = "zip"
     output_path = ".src/lambda_layer.zip"
-    source_dir = ".src"
+    source_dir = ".src/functions.py"
 }
 
 # Define the AWS Lambda layer
