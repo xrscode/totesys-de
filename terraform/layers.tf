@@ -11,6 +11,8 @@
 #     layer_name = "first_layer"
 #     compatible_runtimes = ["python3.12"]
 # }
+
+# Defines Source of Code:
 data "archive_file" "lambda_layer_functions_zip" {
     type        = "zip"
     output_path = "${path.module}/lambda_layer.zip"
@@ -25,9 +27,9 @@ resource "aws_s3_object" "lambda_layer_zip" {
 }
 
 
-# Define the AWS Lambda layer
+# Define the AWS Lambda layer and pull from S3 bucket.
 resource "aws_lambda_layer_version" "layer_one" {
-    filename            = "s3://${aws_s3_object.lambda_layer_zip.bucket}/${aws_s3_object.lambda_layer_zip.key}"
+    filename            = "s3://terraform-xrs/lambda_layer.zip"
     layer_name          = "first_layer"
     compatible_runtimes = ["python3.12"]
 }
