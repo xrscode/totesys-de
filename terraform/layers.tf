@@ -18,7 +18,7 @@ data "archive_file" "lambda_layer_functions_zip" {
 }
 
 # Upload the zip file to S3 bucket
-resource "aws_s3_bucket_object" "lambda_layer_zip" {
+resource "aws_s3_object" "lambda_layer_zip" {
   bucket = "terraform-xrs"
   key    = "lambda_layer.zip"
   source = data.archive_file.lambda_layer_functions_zip.output_path
@@ -27,7 +27,7 @@ resource "aws_s3_bucket_object" "lambda_layer_zip" {
 
 # Define the AWS Lambda layer
 resource "aws_lambda_layer_version" "layer_one" {
-    filename            = "s3://${aws_s3_bucket_object.lambda_layer_zip.bucket}/${aws_s3_bucket_object.lambda_layer_zip.key}"
+    filename            = "s3://${aws_s3_object.lambda_layer_zip.bucket}/${aws_s3_object.lambda_layer_zip.key}"
     layer_name          = "first_layer"
     compatible_runtimes = ["python3.12"]
 }
