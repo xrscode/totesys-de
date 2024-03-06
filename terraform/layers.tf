@@ -13,7 +13,7 @@
 # }
 data "archive_file" "lambda_layer_functions_zip" {
     type        = "zip"
-    output_path = "/tmp/lambda_layer.zip"  # Temporarily save zip file locally
+    output_path = "${path.module}/lambda_layer.zip"
     source_dir  = "${path.module}/../src"
 }
 
@@ -23,6 +23,7 @@ resource "aws_s3_bucket_object" "lambda_layer_zip" {
   key    = "lambda_layer.zip"
   source = data.archive_file.lambda_layer_functions_zip.output_path
 }
+
 
 # Define the AWS Lambda layer
 resource "aws_lambda_layer_version" "layer_one" {
