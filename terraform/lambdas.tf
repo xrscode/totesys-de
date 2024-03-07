@@ -18,7 +18,7 @@ resource "aws_iam_role" "iam_for_lambda" {
 
 data "archive_file" "lambda" {
   type        = "zip"
-  source_file = "${path.module}/../ingestion.py"
+  source_file = "${path.module}/../lambdas/ingestion.py"
   output_path = "${path.module}/../lambdas"
 }
 
