@@ -1,7 +1,6 @@
-from src.functions import *
+from functions import return_one
 
 
 def handler():
-    data = all_data()
-    create_path_add_file()
-    return 'Complete'
+    num = return_one()
+    return num
