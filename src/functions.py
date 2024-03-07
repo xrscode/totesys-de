@@ -224,3 +224,7 @@ def create_path_add_file(file, bucket_name=bucket_names['ingestion']):
     update_aws_time(datetime.now())
     print(f"File path created: {date_str}.  File added!")
     return f"File path created: {date_str}.  File added!"
+
+
+def return_one():
+    return 1
