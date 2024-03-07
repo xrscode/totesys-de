@@ -29,6 +29,7 @@ resource "aws_lambda_function" "ingestion_lambda" {
   function_name = "ingestion"
   role          = aws_iam_role.iam_for_lambda.arn
   handler       = "index.test"
+  layers = [aws_lambda_layer_version.layer_one.arn]
 
   source_code_hash = data.archive_file.ingestion_zip.output_base64sha256
 
