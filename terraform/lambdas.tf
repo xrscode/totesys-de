@@ -19,7 +19,7 @@ resource "aws_iam_role" "iam_for_lambda" {
 data "archive_file" "lambda" {
   type        = "zip"
   source_file = "${path.module}/../lambdas/ingestion.py"
-  output_path = "${path.module}/../lambdas"
+  output_path = "${path.module}/../lambdas/ingestion.zip"
 }
 
 resource "aws_lambda_function" "test_lambda" {
