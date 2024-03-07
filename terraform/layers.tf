@@ -19,5 +19,3 @@ resource "aws_s3_object" "lambda_layer_zip" {
   key    = "lambda_layer.zip"
   source = data.archive_file.lambda_layer_functions_zip.output_path
 }
-
-
