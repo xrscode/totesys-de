@@ -1,7 +1,4 @@
-from functions import *
-import datetime
-import json
-import awswrangler
+from src.functions import *
 
 # Scan Database and assemble JSON:
 data = all_data()
