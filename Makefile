@@ -15,6 +15,11 @@ PIP:=pip
 ROOT_DIR := $(shell pwd)
 ACTIVATE_ENV := source venv/bin/activate
 
+# Dependencies for AWS
+DEPENDENCIES_DIR = src/python/lib/python3.12/site-packages
+install-dependencies:
+	pip install -r requirements.txt -r ./requirements.txt
+
 ## Create python interpreter environment.
 create-environment:
 	@echo ">>> About to create environment: $(PROJECT_NAME)..."

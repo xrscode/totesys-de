@@ -1,6 +1,8 @@
-from functions import return_one
+from functions import *
 
 
-def handler():
-    num = return_one()
-    return num
+def handler(event, context):
+    number = return_one()
+    return number
+
+# Hello.
