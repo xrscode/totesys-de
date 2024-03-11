@@ -10,4 +10,5 @@ autopep8==2.0.4
 bandit==1.7.7
 flake8==7.0.0
 datetime==5.4
+typing-extensions==4.10.0
 safety==3.0.1 
