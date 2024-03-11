@@ -9,6 +9,7 @@ data "aws_iam_policy_document" "assume_role" {
 
     actions = ["sts:AssumeRole"]
   }
+
   statement {
     effect = "Allow"
 
@@ -17,6 +18,8 @@ data "aws_iam_policy_document" "assume_role" {
       "ssm:GetParameters",
       "ssm:GetParametersByPath"
     ]
+    
+    
   }
 }
 
