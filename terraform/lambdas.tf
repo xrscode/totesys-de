@@ -17,8 +17,6 @@ data "aws_iam_policy_document" "assume_role" {
       "ssm:GetParameters",
       "ssm:GetParametersByPath"
     ]
-    
-    resources = ["*"]  # You can restrict this to specific parameters or paths if needed
   }
 }
 
