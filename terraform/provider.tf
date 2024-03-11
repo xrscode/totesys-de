@@ -10,7 +10,7 @@ terraform {
       }
     }
     backend "s3" {
-      bucket = "terraform-xrs" 
+      bucket = "terraform-xrs1" 
       key = "tf-state"
       region = "eu-west-2"
     }
