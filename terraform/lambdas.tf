@@ -9,18 +9,6 @@ data "aws_iam_policy_document" "assume_role" {
 
     actions = ["sts:AssumeRole"]
   }
-
-  statement {
-    effect = "Allow"
-
-    actions = [
-      "ssm:GetParameter",
-      "ssm:GetParameters",
-      "ssm:GetParametersByPath"
-    ]
-    
-    
-  }
 }
 
 data "archive_file" "ingestion_zip" {
