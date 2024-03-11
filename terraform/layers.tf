@@ -15,7 +15,7 @@ resource "aws_lambda_layer_version" "layer_one" {
 
 # Upload the zip file to S3 bucket for backup
 resource "aws_s3_object" "lambda_layer_zip" {
-  bucket = "terraform-xrs"
+  bucket = "terraform-xrs1"
   key    = "lambda_layer.zip"
   source = data.archive_file.lambda_layer_functions_zip.output_path
 }
