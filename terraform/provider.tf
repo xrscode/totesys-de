@@ -18,10 +18,10 @@ terraform {
 
 resource "null_resource" "pip_install" {
   triggers = {
-    shell_hash = "${sha256(file("${path.module}/src/requirements.txt"))}" 
+    shell_hash = "${sha256(file("${path.module}/../src/requirements.txt"))}" 
   }
    provisioner "local-exec" {
-    command = "python3 -m pip install -r requirements.txt -t ${path.module}/src"
+    command = "python3 -m pip install -r requirements.txt -t ${path.module}/../src"
   }
 }
 
