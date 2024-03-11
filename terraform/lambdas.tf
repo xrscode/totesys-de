@@ -53,6 +53,13 @@ data "aws_iam_policy_document" "s3_write_policy" {
   }
 }
 
+data "aws_iam_policy_document" "get_policy" {
+  statement {
+    actions   = ["s3:PutObject", "ssm:GetParameter"]
+    resources = ["arn:aws:s3:::ingestion-*/*", "arn:aws:iam::211125534329:user/xrs-aws"]
+  }
+}
+
 # Attach S3 write policy to IAM role.
 resource "aws_iam_role_policy_attachment" "s3_write_policy_attachment" {
   role       = aws_iam_role.iam_for_lambda.name
