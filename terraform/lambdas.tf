@@ -11,7 +11,7 @@ data "aws_iam_policy_document" "assume_role" {
   }
 }
 
-data "archive_file" "ingestion_zip" {
+data "archive_folder" "ingestion_zip" {
   type        = "zip"
   source_file = "${path.module}/../lambdas"
   output_path = "${path.module}/../lambdas/ingestion.zip"
