@@ -65,3 +65,9 @@ resource "aws_iam_role_policy_attachment" "s3_write_policy_attachment" {
   role       = aws_iam_role.iam_for_lambda.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"  # or use the ARN of your custom policy
 }
+
+# Attach Get Parameter to IAM role.
+resource "aws_iam_role_policy_attachment" "aws_get_Parameter" {
+  role       = aws_iam_role.iam_for_lambda.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess"  # or use the ARN of your custom policy
+}
