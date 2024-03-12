@@ -29,12 +29,6 @@ resource "aws_lambda_function" "ingestion_lambda" {
   source_code_hash = data.archive_file.ingestion_zip.output_base64sha256
 
   runtime = "python3.12"
-
-#   environment {
-#     variables = {
-#       foo = "bar"
-#     }
-#   }
 }
 
 # Permissions:
