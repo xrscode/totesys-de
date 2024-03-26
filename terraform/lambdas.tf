@@ -47,12 +47,30 @@ data "aws_iam_policy_document" "s3_write_policy" {
   }
 }
 
+# Define policy to get paramter.
 data "aws_iam_policy_document" "get_policy" {
   statement {
-    actions   = ["s3:PutObject", "ssm:GetParameter"]
+    actions   = ["ssm:GetParameter"]
     resources = ["arn:aws:s3:::ingestion-*/*", "arn:aws:iam::211125534329:user/xrs-aws"]
   }
 }
+
+# Define Policy to allow access to Secrets Manager
+data "aws_iam_policy_document" "access_secrets" {
+  statement {
+    sid    = "AllowLambdaToAccessSecret"
+    effect = "Allow"
+
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::123456789012:root"]
+    }
+
+    actions   = ["secretsmanager:GetSecretValue"]
+    resources = [aws_secretsmanager_secret.access_secrets.arn]
+  }
+}
+
 
 # Attach S3 write policy to IAM role.
 resource "aws_iam_role_policy_attachment" "s3_write_policy_attachment" {
@@ -60,8 +78,14 @@ resource "aws_iam_role_policy_attachment" "s3_write_policy_attachment" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"  # or use the ARN of your custom policy
 }
 
-# Attach Get Parameter to IAM role.
+# Attach Get Parameter policy to IAM role.
 resource "aws_iam_role_policy_attachment" "aws_get_Parameter" {
   role       = aws_iam_role.iam_for_lambda.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess"  # or use the ARN of your custom policy
+}
+
+# Attach SecretsManager policy to IAM role.
+resource "aws_iam_role_policy_attachment" "lambda_access_secret" {
+  role       = aws_iam_role.iam_for_lambda.name
+  policy_arn = aws_iam_policy.access_secrets.arn
 }

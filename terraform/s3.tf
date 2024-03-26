@@ -1,3 +1,4 @@
+# Create S3 buckets.
 resource "aws_s3_bucket" "ingestion" {
     bucket_prefix = "ingestion-"
     force_destroy = true
@@ -15,6 +16,7 @@ resource "aws_s3_bucket" "storage" {
     force_destroy = true
 }
 
+# Stores the names of the Buckets:
 resource "aws_ssm_parameter" "ingestion_bucket_name" {
     name  = "/ingestion"
     type  = "String"

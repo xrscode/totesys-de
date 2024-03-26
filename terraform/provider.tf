@@ -1,3 +1,4 @@
+# This will setup the backend.
 provider "aws" {
     region = "eu-west-2"
 }
