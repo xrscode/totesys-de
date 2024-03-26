@@ -66,7 +66,7 @@ data "aws_iam_policy_document" "access_secrets" {
   }
 }
 
-# Name of secret:
+# Define name of secret to access:
 resource "aws_secretsmanager_secret" "access_secrets" {
   name = "totesysDatabase"
   # Other attributes of the secret
@@ -76,17 +76,17 @@ resource "aws_secretsmanager_secret" "access_secrets" {
 # Attach S3 write policy to IAM role.
 resource "aws_iam_role_policy_attachment" "s3_write_policy_attachment" {
   role       = aws_iam_role.iam_for_lambda.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"  # or use the ARN of your custom policy
+  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"  
 }
 
 # Attach Get Parameter policy to IAM role.
 resource "aws_iam_role_policy_attachment" "aws_get_Parameter" {
   role       = aws_iam_role.iam_for_lambda.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess"  # or use the ARN of your custom policy
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess"  
 }
 
 # Attach SecretsManager policy to IAM role.
 resource "aws_iam_role_policy_attachment" "lambda_access_secret" {
   role       = aws_iam_role.iam_for_lambda.name
-  policy_arn = aws_iam_policy.access_secrets.arn
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess"
 }
