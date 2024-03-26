@@ -61,14 +61,15 @@ data "aws_iam_policy_document" "access_secrets" {
     sid    = "AllowLambdaToAccessSecret"
     effect = "Allow"
 
-    principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::123456789012:root"]
-    }
-
     actions   = ["secretsmanager:GetSecretValue"]
     resources = [aws_secretsmanager_secret.access_secrets.arn]
   }
+}
+
+# Name of secret:
+resource "aws_secretsmanager_secret" "access_secrets" {
+  name = "totesysDatabase"
+  # Other attributes of the secret
 }
 
 
