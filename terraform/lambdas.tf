@@ -70,6 +70,6 @@ resource "aws_iam_role_policy_attachment" "aws_get_Parameter" {
 
 # Attach Secrets Access policy to IAM role.
 resource "aws_iam_role_policy_attachment" "secret_access_policy" {
-  role       = aws_iam_role.iam_for_ingestion.name
+  role       = aws_iam_role.iam_for_lambda.name
   policy_arn = "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
 }
