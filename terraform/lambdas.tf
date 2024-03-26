@@ -55,23 +55,6 @@ data "aws_iam_policy_document" "get_policy" {
   }
 }
 
-# Define Policy to allow access to Secrets Manager
-data "aws_iam_policy_document" "access_secrets" {
-  statement {
-    sid    = "AllowLambdaToAccessSecret"
-    effect = "Allow"
-
-    actions   = ["secretsmanager:GetSecretValue"]
-    resources = [aws_secretsmanager_secret.access_secrets.arn]
-  }
-}
-
-# Define name of secret to access:
-resource "aws_secretsmanager_secret" "access_secrets" {
-  name = "totesysDatabase"
-  # Other attributes of the secret
-}
-
 
 # Attach S3 write policy to IAM role.
 resource "aws_iam_role_policy_attachment" "s3_write_policy_attachment" {
@@ -85,8 +68,8 @@ resource "aws_iam_role_policy_attachment" "aws_get_Parameter" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess"  
 }
 
-# Attach SecretsManager policy to IAM role.
-resource "aws_iam_role_policy_attachment" "lambda_access_secret" {
-  role       = aws_iam_role.iam_for_lambda.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess"
+# Attach Secrets Access policy to IAM role.
+resource "aws_iam_role_policy_attachment" "secret_access_policy" {
+  role       = aws_iam_role.iam_for_ingestion.name
+  policy_arn = "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
 }
