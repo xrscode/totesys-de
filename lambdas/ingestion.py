@@ -1,5 +1,5 @@
 # from functions import *
-from src.functions import *
+from functions import *
 
 
 def handler(event, context):
@@ -7,5 +7,6 @@ def handler(event, context):
     return date
 
 # Hello.
+
 
 print(return_one())
