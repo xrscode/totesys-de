@@ -3,5 +3,6 @@ from functions import *
 
 
 def handler(event, context):
-    date = get_secret()
+    names = get_bucket_names()
+    date = get_aws_time()
     return date
