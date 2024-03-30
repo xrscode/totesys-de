@@ -1,4 +1,5 @@
 # Define Source of Lambda Layer Code
+# And Create ZIP File.
 data "archive_file" "lambda_layer_functions_zip"{
     type = "zip"
     output_path = "${path.module}/lambda_layer.zip"
