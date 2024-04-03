@@ -1,8 +1,8 @@
 from functions import *
 
-
-def handler(event, context):
-    names = get_bucket_names()
-    date = get_aws_time()
-    data = all_data()
-    return data
+async def handler(event, context):
+    try:
+        await data = all_data()
+        await create_path_add_file(data, bucket_name=get_bucket_names()['ingestion'])
+    except:
+        return 'Error!'
