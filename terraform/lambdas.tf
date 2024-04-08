@@ -43,7 +43,7 @@ resource "aws_iam_role" "iam_for_lambda" {
 data "aws_iam_policy_document" "s3_write_policy" {
   statement {
     actions   = ["s3:PutObject"]
-    resources = ["arn:aws:s3:::ingestion-*/*"]
+    resources = ["arn:aws:s3:::ingestion-*/*", "arn:aws:iam::211125534329:user/xrs-aws"]
   }
 }
 
@@ -63,10 +63,10 @@ resource "aws_iam_role_policy_attachment" "s3_write_policy_attachment" {
 }
 
 # Attach Get Parameter policy to IAM role.
-resource "aws_iam_role_policy_attachment" "aws_get_Parameter" {
-  role       = aws_iam_role.iam_for_lambda.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess"  
-}
+# resource "aws_iam_role_policy_attachment" "aws_get_Parameter" {
+#   role       = aws_iam_role.iam_for_lambda.name
+#   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess"  
+# }
 
 # Attach Secrets Access policy to IAM role.
 resource "aws_iam_role_policy_attachment" "secret_access_policy" {
