@@ -37,7 +37,7 @@ resource "aws_ssm_parameter" "set_start_date_1970" {
 
 # Set Files for Backup:
 resource "aws_ssm_parameter" "backup_files" {
-  name  = "/backup/files"
+  name  = "/backup"
   type  = "String"
   value = "{}"  
 }
