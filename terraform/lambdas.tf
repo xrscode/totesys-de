@@ -47,17 +47,10 @@ data "aws_iam_policy_document" "s3_write_policy" {
   }
 }
 
-# Define policy to get paramter.
+# Define policy to get and put paramter.
 data "aws_iam_policy_document" "get_policy" {
   statement {
-    actions   = ["ssm:GetParameter"]
-    resources = ["arn:aws:s3:::ingestion-*/*", "arn:aws:iam::211125534329:user/xrs-aws"]
-  }
-}
-
-data "aws_iam_policy_document" "put_policy" {
-  statement {
-    actions   = ["ssm:PutParameter"]
+    actions   = ["ssm:GetParameter", "ssm:PutParameter"]
     resources = ["arn:aws:s3:::ingestion-*/*", "arn:aws:iam::211125534329:user/xrs-aws"]
   }
 }
