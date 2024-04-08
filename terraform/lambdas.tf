@@ -74,17 +74,21 @@ resource "aws_iam_role_policy_attachment" "secret_access_policy" {
   policy_arn = "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
 }
 
-data "aws_iam_policy_document" "lambda_ssm_policy" {
-  statement {
-    effect = "Allow"
-    actions = [
-      "ssm:PutParameter"
-    ]
-    resources = ["*"]
-  }
-}
 
-resource "aws_iam_role_policy_attachment" "lambda_ssm_policy_attachment" {
-  role       = aws_iam_role.iam_for_ingestion.name
-  policy_arn = aws_iam_policy.lambda_ssm_policy.arn
-}
+#
+# Define SSM Put Parameter Policy.
+# data "aws_iam_policy_document" "lambda_ssm_policy" {
+#   statement {
+#     effect = "Allow"
+#     actions = [
+#       "ssm:PutParameter"
+#     ]
+#     resources = ["arn:aws:s3:::ingestion-*/*", "arn:aws:iam::211125534329:user/xrs-aws"]
+#   }
+# }
+
+# # Attach SSM Put Parameter Policy to role.
+# resource "aws_iam_role_policy_attachment" "lambda_ssm_policy_attachment" {
+#   role       = aws_iam_role.iam_for_ingestion.name
+#   policy_arn = aws_iam_policy.lambda_ssm_policy.arn
+# }
