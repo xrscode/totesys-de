@@ -34,3 +34,10 @@ resource "aws_ssm_parameter" "set_start_date_1970" {
     type  = "String"
     value = "1900-02-20 18:14:14.000000"
 }
+
+# Set Files for Backup:
+resource "aws_ssm_parameter" "backup_files" {
+  name  = "/backup/files"
+  type  = "String"
+  value = "{}"  
+}
