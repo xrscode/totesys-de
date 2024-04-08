@@ -47,10 +47,10 @@ data "aws_iam_policy_document" "s3_write_policy" {
   }
 }
 
-# Define policy to get and put paramter.
+# Define policy to get.
 data "aws_iam_policy_document" "get_policy" {
   statement {
-    actions   = ["ssm:GetParameter", "ssm:PutParameter"]
+    actions   = ["ssm:GetParameter"]
     resources = ["arn:aws:s3:::ingestion-*/*", "arn:aws:iam::211125534329:user/xrs-aws"]
   }
 }
@@ -72,4 +72,19 @@ resource "aws_iam_role_policy_attachment" "aws_get_Parameter" {
 resource "aws_iam_role_policy_attachment" "secret_access_policy" {
   role       = aws_iam_role.iam_for_lambda.name
   policy_arn = "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
+}
+
+data "aws_iam_policy_document" "lambda_ssm_policy" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "ssm:PutParameter"
+    ]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_ssm_policy_attachment" {
+  role       = aws_iam_role.iam_for_ingestion.name
+  policy_arn = aws_iam_policy.lambda_ssm_policy.arn
 }
