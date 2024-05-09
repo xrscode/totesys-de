@@ -13,7 +13,7 @@ data "archive_file" "transform_zip" {
 # Create the Lambda function in AWS
 resource "aws_lambda_function" "transform_lambda" {
 # Location of file, comes from zip.
-  filename      = data.archive_file.transform.zip.output_path
+  filename      = data.archive_file.transform_zip.output_path
 # Create name of lambda function in AWS:
   function_name = "transform"
 # Specify IAM role Lambda function will assume.
