@@ -28,7 +28,7 @@
 
 data "archive_file" "ingestion_zip" {
   type        = "zip"
-  source_file = "${path.module}/../lambdas/lambda_ingestion.py"
+  source_file = "${path.module}/../lambdas/ingestion.py"
   output_path = "${path.module}/../lambdas/ingestion.zip"
 }
 
