@@ -1,4 +1,4 @@
-# This Terraform file creates necessary permissions.
+# This Terraform file creates necessary permissions for lambda functions.
 
 # Create Assume Role Policy Document
 data "aws_iam_policy_document" "assume_role" {
@@ -22,23 +22,7 @@ resource "aws_iam_role" "iam_for_ingestion" {
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 
-
-# Define policy document allowing S3 write access.
-# data "aws_iam_policy_document" "s3_write_policy" {
-#   statement {
-#     actions   = ["s3:PutObject"]
-#     resources = ["arn:aws:s3:::ingestion-*/*", "arn:aws:iam::211125534329:user/xrs-aws"]
-#   }
-# }
-
-# # Define policy to get.
-# data "aws_iam_policy_document" "get_policy" {
-#   statement {
-#     actions   = ["ssm:GetParameter"]
-#     resources = ["arn:aws:s3:::ingestion-*/*", "arn:aws:iam::211125534329:user/xrs-aws"]
-#   }
-# }
-
+# Create policy document:
 data "aws_iam_policy_document" "ingestion_policies" {
   statement {
     actions   = ["s3:PutObject", "ssm:GetParameter", "secretsmanager:GetSecretValue", "secretsmanager:PutSecretValue"]

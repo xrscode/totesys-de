@@ -5,7 +5,7 @@ data "archive_file" "transform_zip" {
 # Specify type of file:
   type        = "zip"
 # Specify location of file:
-  source_file = "${path.module}/../lambdas/transform.py"
+  source_file = "${path.module}/../lambdas/lambda_transform.py"
 # Creates an output path:
   output_path = "${path.module}/../lambdas/transform.zip"
 }

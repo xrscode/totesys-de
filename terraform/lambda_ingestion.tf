@@ -28,14 +28,14 @@
 
 data "archive_file" "ingestion_zip" {
   type        = "zip"
-  source_file = "${path.module}/../lambdas/ingestion.py"
+  source_file = "${path.module}/../lambdas/lambda_ingestion.py"
   output_path = "${path.module}/../lambdas/ingestion.zip"
 }
 
 resource "aws_lambda_function" "ingestion_lambda" {
   filename      = data.archive_file.ingestion_zip.output_path
   function_name = "ingestion"
-  role          = aws_iam_role.iam_for_lambda.arn
+  role          = aws_iam_role.iam_for_ingestion.arn
   handler       = "ingestion.handler"
   layers = [aws_lambda_layer_version.layer_one.arn]
 
