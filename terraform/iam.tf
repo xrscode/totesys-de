@@ -23,26 +23,26 @@ resource "aws_iam_role" "iam_for_ingestion" {
 }
 
 # Create policy document:
-data "aws_iam_policy_document" "ingestion_policies" {
-  statement {
-    # S3:PutObject - allows upload of files to S3 bucket.
-    # ssm:GetParameter - get information about single parameter
-    # by specifying the parameter name. 
-    # "secretsmanager:GetSecretValue", "secretsmanager:PutSecretValue" - 
-    # Allows data to be writen and read from AWS secrets manager.
-    actions   = ["s3:PutObject", "ssm:GetParameter", "secretsmanager:GetSecretValue", "secretsmanager:PutSecretValue"]
-    # 
-    resources = [
-    # Specifies the AWS resources to which actions apply:
-    # Defines S3 Ingestion bucket:
-      "arn:aws:s3:::ingestion-*/*",
-    # Defines parameter store:
-      "arn:aws:ssm:::parameter/*",
-    # Defines 
-      "arn:aws:iam::211125534329:user/xrs-aws"
-    ]
-  }
-}
+# data "aws_iam_policy_document" "ingestion_policies" {
+#   statement {
+#     # S3:PutObject - allows upload of files to S3 bucket.
+#     # ssm:GetParameter - get information about single parameter
+#     # by specifying the parameter name. 
+#     # "secretsmanager:GetSecretValue", "secretsmanager:PutSecretValue" - 
+#     # Allows data to be writen and read from AWS secrets manager.
+#     actions   = ["s3:PutObject", "ssm:GetParameter", "secretsmanager:GetSecretValue", "secretsmanager:PutSecretValue"]
+#     # 
+#     resources = [
+#     # Specifies the AWS resources to which actions apply:
+#     # Defines S3 Ingestion bucket:
+#       "arn:aws:s3:::ingestion-*/*",
+#     # Defines parameter store:
+#       "arn:aws:ssm:::parameter/*"
+#     # Defines 
+#       # "arn:aws:iam::211125534329:user/xrs-aws"
+#     ]
+#   }
+# }
 
 # Attach S3 write policy to IAM role.
 resource "aws_iam_role_policy_attachment" "s3_write_policy_attachment" {
@@ -60,4 +60,10 @@ resource "aws_iam_role_policy_attachment" "aws_get_Parameter" {
 resource "aws_iam_role_policy_attachment" "secret_access_policy" {
   role       = aws_iam_role.iam_for_ingestion.name
   policy_arn = "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
+}
+
+# Attach ssm:PutParameter to IAM role.
+resource "aws_iam_role_policy_attachment" "parameter_access_policy" {
+  role       = aws_iam_role.iam_for_ingestion.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMFullAccess"
 }
