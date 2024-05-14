@@ -10,6 +10,6 @@ def handler(event, context):
     try:
         # Adding data to S3 Ingestion bucket:
         create_path_add_file(data, bucket_name=get_bucket_names()['ingestion'])
-        return 'Files added to S3 bucket.'
+        return 'Files added to S3 bucket.  Updated last update time.'
     except Exception as e:
         return 'Error: {}'.format(e)
