@@ -18,14 +18,18 @@ resource "aws_lambda_function" "transform_lambda" {
   function_name = "transform"
 # Specify IAM role Lambda function will assume.
 # Defines permissions Lambda function has.
-# CHANGE CHANGE CHANGE CHANGE *$*%@£%£*$%@£$*@£$%*@£$%*@£$%*£@
-  role          = aws_iam_role.iam_for_ingestion.arn
+  role          = aws_iam_role.iam_for_transformation.arn
 # Defines name of handler function.  ingestion.py > def handler()
-  handler       = "ingestion.handler"
+  handler       = "transform.handler"
 # Lambda layers function depends on.  layer one:
   layers = [aws_lambda_layer_version.layer_one.arn]
 # AWS Lambda updates only if code changes.
   source_code_hash = data.archive_file.transform_zip.output_base64sha256
+# Define timeout time (seconds) for Lambda fucntion to run:
+  timeout = 180
+# Define memory size required for Lambda function (megabytes):
+  memory_size = 512
+# Define runtime:
   runtime = "python3.12"
 }
 
