@@ -39,7 +39,7 @@ data "aws_iam_policy_document" "ingestion_policies" {
     # Defines parameter store:
       "arn:aws:ssm:::parameter/*",
     # Defines 
-      # "arn:aws:iam::211125534329:user/xrs-aws"
+      "arn:aws:iam::211125534329:user/xrs-aws"
     ]
   }
 }
