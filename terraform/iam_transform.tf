@@ -1,4 +1,4 @@
-# Creates Permissions for Transform Lambda to work. 
+# Creates Permissions for 'transform' lambda to work. 
 
 # Transform Lambda Policies:
 resource "aws_iam_role" "iam_for_transformation" {
