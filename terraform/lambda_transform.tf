@@ -29,4 +29,4 @@ resource "aws_lambda_function" "transform_lambda" {
   runtime = "python3.12"
 }
 
-# Permissions
+
