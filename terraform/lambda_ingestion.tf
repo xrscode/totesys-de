@@ -30,18 +30,3 @@ resource "aws_lambda_function" "ingestion_lambda" {
   runtime = "python3.12"
 }
 
-    # Args:
-    #     function_name (str): The name of the Lambda function.
-    #     role (str): The Amazon Resource Name (ARN) of the IAM role that the Lambda function can assume.
-    #     handler (str): The name of the function (within your code) that Lambda calls to start execution.
-    #     runtime (str): The runtime environment for the Lambda function.
-    #     s3_bucket (str): The name of the Amazon S3 bucket that contains the deployment package.
-    #     s3_key (str): The Amazon S3 object (the deployment package) key name.
-    #     layers (list): List of ARNs of Lambda layers to attach to the Lambda function.
-    #     source_code_hash (str): Base64-encoded representation of the SHA256 hash of the deployment package.
-    #     memory_size (int): The amount of memory, in MB, that is allocated for the Lambda function.
-    #     timeout (int): The function execution time (in seconds) after which Lambda terminates the function.
-
-    # Returns:
-    #     None
-# }

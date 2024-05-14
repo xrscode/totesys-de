@@ -51,10 +51,10 @@ resource "aws_iam_role_policy_attachment" "s3_write_policy_attachment" {
 }
 
 # Attach Get Parameter policy to IAM role.
-resource "aws_iam_role_policy_attachment" "aws_get_Parameter" {
-  role       = aws_iam_role.iam_for_ingestion.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess"  
-}
+# resource "aws_iam_role_policy_attachment" "aws_get_Parameter" {
+#   role       = aws_iam_role.iam_for_ingestion.name
+#   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess"  
+# }
 
 # Attach Secrets Access policy to IAM role.
 resource "aws_iam_role_policy_attachment" "secret_access_policy" {
