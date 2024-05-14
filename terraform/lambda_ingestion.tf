@@ -20,6 +20,10 @@ resource "aws_lambda_function" "ingestion_lambda" {
   handler       = "ingestion.handler"
   # Define layers - dependencies and functions necessary to run
   layers = [aws_lambda_layer_version.layer_one.arn]
+  # Define timeout time (seconds) for Lambda function to run: 
+  timeout = 180
+  # Define memory required for Lambda function (megabytes).
+  memory_size = 512
 
   source_code_hash = data.archive_file.ingestion_zip.output_base64sha256
   # Define runtime
