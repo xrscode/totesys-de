@@ -1,7 +1,7 @@
 from functions import *
 
 
-def handler(event, context):
+def handler(event):
     try:
         return process_write(event)
 
