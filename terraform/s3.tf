@@ -19,11 +19,14 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
   bucket = aws_s3_bucket.ingestion.bucket
 
   lambda_function {
-    lambda_function_arn = aws_lambda_function.ingestion_lambda.arn
+    lambda_function_arn = aws_lambda_function.transform_lambda.arn
     events              = ["s3:ObjectCreated:*"]
   }
 
-  depends_on = [aws_lambda_permission.allow_s3_invoke, aws_lambda_function.transform_lambda]
+  depends_on = [
+    aws_lambda_permission.allow_s3_invoke, 
+    aws_lambda_function.transform_lambda
+    ]
 }
 
 # Creates Process Bucket:
