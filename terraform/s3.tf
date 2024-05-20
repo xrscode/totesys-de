@@ -14,7 +14,7 @@ resource "aws_lambda_permission" "allow_s3_invoke" {
     source_arn = aws_s3_bucket.ingestion.arn
 }
 
-# Create the S3 notification:
+# Create the S3 notification property for S3 Ingestion bucket:
 resource "aws_s3_bucket_notification" "bucket_notification" {
   bucket = aws_s3_bucket.ingestion.bucket
 
@@ -23,7 +23,7 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
     events              = ["s3:ObjectCreated:*"]
   }
 
-  depends_on = [aws_lambda_permission.allow_s3_invoke]
+  depends_on = [aws_lambda_permission.allow_s3_invoke, aws_lambda_function.transform_lambda]
 }
 
 # Creates Process Bucket:
