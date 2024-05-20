@@ -17,16 +17,6 @@ terraform {
     }
 }
 
-# Install Dependencies online.
-# Does not require zip package.
-# resource "null_resource" "pip_install" {
-#   triggers = {
-#     shell_hash = "${sha256(file("${path.module}/../src/requirements.txt"))}" 
-#   }
-#    provisioner "local-exec" {
-#     command = "python3 -m pip install -r requirements.txt -t ${path.module}/../src"
-#   }
-# }
 
 # Set Default Time
 resource "aws_ssm_parameter" "set_start_date_1970" {
