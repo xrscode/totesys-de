@@ -3,6 +3,8 @@ from functions import *
 
 def handler(event, context):
     try:
-        return return_one()
+        records = event['Records']
+        s3.put_object(Key=records, Bucket=get_bucket_names()['process'])
+
     except Exception as e:
         return 'Error: {}'.format(e)
