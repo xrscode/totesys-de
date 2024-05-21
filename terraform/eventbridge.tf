@@ -2,7 +2,7 @@
 # Create IAM role:
 # Creates IAM Role for Lambda.
 resource "aws_iam_role" "lambda_ingestion" {
-  name = "Ingestion EventBridge"
+  name = "Ingestion_EventBridge"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -34,7 +34,7 @@ resource "aws_cloudwatch_event_rule" "every_15_minutes" {
 resource "aws_lambda_permission" "allow_eventbridge" {
   statement_id  = "AllowExecutionFromEventBridge"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.ingestion.function_name
+  function_name = aws_lambda_function.ingestion_lambda.function_name
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.every_15_minutes.arn
 }
@@ -43,5 +43,5 @@ resource "aws_lambda_permission" "allow_eventbridge" {
 resource "aws_cloudwatch_event_target" "invoke_lambda" {
   rule      = aws_cloudwatch_event_rule.every_15_minutes.name
   target_id = "lambda"
-  arn       = aws_lambda_function.ingestion.arn
+  arn       = aws_lambda_function.ingestion_lambda.arn
 }
