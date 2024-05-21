@@ -13,3 +13,4 @@ datetime==5.4
 typing-extensions==4.10.0
 safety==3.0.1
 pandas==2.2.2
+pyarrow==16.1.0
