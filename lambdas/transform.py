@@ -23,3 +23,9 @@ def handler(event, context):
 
     except Exception as e:
         return 'Error: {}'.format(e)
+
+    # Attempt to create/update dim_counterparty:
+    try:
+        dim_counterparty(data)
+    except Exception as e:
+        return 'Error: {}'.format(e)
