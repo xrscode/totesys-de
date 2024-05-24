@@ -31,3 +31,8 @@ resource "aws_ssm_parameter" "backup_files" {
   type  = "String"
   value = "{}"  
 }
+
+# Create ECR repository:
+resource "aws_ecr_repository" "my_repository" {
+  name = "lambda_functions"  # Specify the name for your ECR repository
+}
