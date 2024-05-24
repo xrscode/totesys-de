@@ -31,7 +31,7 @@ jobs:
                 aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
 
             - name: Run setup.py to setup AWS ECR repository
-              run: python setup.py
+              run: python .github/workflows/setup.py
               env: 
                 AWS_ECR: ${{secrets.AWS_ECR}}
 
