@@ -1,25 +1,23 @@
 # Deploy Transformation Lambda from AWS ECR
-# # Create the Lambda function in AWS
-# resource "aws_lambda_function" "transform_lambda" {
-# # Location of file, comes from zip.
-#   filename      = data.archive_file.transform_zip.output_path
-# # Create name of lambda function in AWS:
-#   function_name = "transform"
-# # Specify IAM role Lambda function will assume.
-# # Defines permissions Lambda function has.
-#   role          = aws_iam_role.iam_for_transformation.arn
-# # Defines name of handler function.  ingestion.py > def handler()
-#   handler       = "transform.handler"
-# # Lambda layers function depends on.  layer one:
-#   layers = [aws_lambda_layer_version.layer_one.arn]
-# # AWS Lambda updates only if code changes.
-#   source_code_hash = data.archive_file.transform_zip.output_base64sha256
-# # Define timeout time (seconds) for Lambda fucntion to run:
-#   timeout = 180
-# # Define memory size required for Lambda function (megabytes):
-#   memory_size = 512
-# # Define runtime:
-#   runtime = "python3.12"
-# }
+# Create the Lambda function in AWS
+resource "aws_lambda_function" "transform_lambda" {
+# Create name of lambda function in AWS:
+  function_name = "transform"
+
+# Assign role/permissions:
+  role          = aws_iam_role.iam_for_transformation.arn
+
+# Define package type:
+  package_type = "Image"
+
+# Set URI to AWS ECR location:
+  image_uri = "211125534329.dkr.ecr.eu-west-2.amazonaws.com/lambda_functions:ingestion"
+
+# Define timeout time (seconds) for Lambda fucntion to run:
+  timeout = 180
+
+# Define memory size required for Lambda function (megabytes):
+  memory_size = 512
+}
 
 

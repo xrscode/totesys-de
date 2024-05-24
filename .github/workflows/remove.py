@@ -11,7 +11,7 @@ def remove_ecr(repo_id=repo):
     Repo ID.  The AWS account ID associated with registry.
 
     RETURNS:
-    Removes repoistory
+    Removes repository; 'lambda_functions'
     """
 
     # Establish ECR Client:
