@@ -29,27 +29,43 @@ jobs:
                 aws-region: ${{ secrets.AWS_REGION }}
                 aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
                 aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+
             - name: Create ECR 
               run: aws ecr create-repository --repository-name lambda_functions
 
-            - name: Deploy Terraform
-              uses: hashicorp/setup-terraform@v3
+            - name: authenticate AWS ECR
+              run: aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin 211125534329.dkr.ecr.eu-west-2.amazonaws.com
             
-            - name: Terraform Init
-              working-directory: terraform
-              run: terraform init
+            - name: Create ingestion image
+              run: docker build -t 211125534329.dkr.ecr.eu-west-2.amazonaws.com/test_xrs:ingestion -f Docker_ingestion .
 
-            - name: Terraform Plan
-              working-directory: terraform
-              run: terraform plan
+            - name: Create transform image
+              run:  docker build -t 211125534329.dkr.ecr.eu-west-2.amazonaws.com/test_xrs:transform -f Docker_transform .
 
-            - name: Terraform Apply
-              working-directory: terraform
-              run: terraform apply -auto-approve
+            - name: Push ingestion to AWS ECR
+              run: docker push 211125534329.dkr.ecr.eu-west-2.amazonaws.com/test_xrs:ingestion
+            
+            - name: Push transform to AWS ECR
+              run: docker push 211125534329.dkr.ecr.eu-west-2.amazonaws.com/test_xrs:transform   
 
-            - name: Terraform Destroy
-              working-directory: terraform
-              run: terraform destroy -auto-approve
+            # - name: Deploy Terraform
+            #   uses: hashicorp/setup-terraform@v3
+            
+            # - name: Terraform Init
+            #   working-directory: terraform
+            #   run: terraform init
+
+            # - name: Terraform Plan
+            #   working-directory: terraform
+            #   run: terraform plan
+
+            # - name: Terraform Apply
+            #   working-directory: terraform
+            #   run: terraform apply -auto-approve
+
+            # - name: Terraform Destroy
+            #   working-directory: terraform
+            #   run: terraform destroy -auto-approve
 
             # - name: Destroy ECR
             #   run: aws ecr delete-repository --repository-name lambda_functions --force
