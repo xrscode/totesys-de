@@ -30,7 +30,13 @@ jobs:
                 aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
                 aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
 
-            - name: Create ECR 
+            - name: Check if ECR repository exists
+              id: check_ecr_repo
+              run: aws ecr describe-repositories --repository-names lambda_functions > /dev/null 2>&1 || exit 0
+                  echo "::set-output name=repo_exists::true"
+              
+            - name: Create ECR repository if not exists
+              if: steps.check_ecr_repo.outputs.repo_exists != 'true'
               run: aws ecr create-repository --repository-name lambda_functions
 
             - name: Authenticate AWS ECR
