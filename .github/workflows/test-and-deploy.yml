@@ -38,11 +38,11 @@ jobs:
             
             - name: Create ingestion image
               run: 
-                cd src/Docker_ingestion && docker build -t 211125534329.dkr.ecr.eu-west-2.amazonaws.com/test_xrs:ingestion -f Docker_ingestion .
+                cd src && docker build -t 211125534329.dkr.ecr.eu-west-2.amazonaws.com/test_xrs:ingestion -f Docker_ingestion .
 
             - name: Create transform image
               run:  
-               cd src/Docker_transform && docker build -t 211125534329.dkr.ecr.eu-west-2.amazonaws.com/test_xrs:transform -f Docker_transform .
+               cd src && docker build -t 211125534329.dkr.ecr.eu-west-2.amazonaws.com/test_xrs:transform -f Docker_transform .
 
             - name: Push ingestion to AWS ECR
               run: docker push 211125534329.dkr.ecr.eu-west-2.amazonaws.com/test_xrs:ingestion
