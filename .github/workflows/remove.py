@@ -5,7 +5,7 @@ import boto3
 repo = os.getenv("AWS_ECR")
 
 
-def remove_ecr(repo_id=repo):
+def remove_ecr(repo_id):
     """
     ARGS:
     Repo ID.  The AWS account ID associated with registry.
