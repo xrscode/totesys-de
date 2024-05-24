@@ -29,7 +29,8 @@ jobs:
                 aws-region: ${{ secrets.AWS_REGION }}
                 aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
                 aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-             run: aws ecr create-repository --repository-name my-docker-repo
+            - name: Create ECR 
+              run: aws ecr create-repository --repository-name my-docker-repo
 
             - name: Deploy Terraform
               uses: hashicorp/setup-terraform@v3
