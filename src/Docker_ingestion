@@ -1,0 +1,15 @@
+FROM public.ecr.aws/lambda/python:3.12-arm64
+
+# Copy Requirements:
+COPY requirements.txt '.'
+
+# Install packages
+RUN pip install -r requirements.txt
+
+# Copy function code
+COPY ingestion.py '.'
+COPY functions.py '.'
+
+
+# Set the handler for the Lambda function:
+CMD ["transform.handler"]
