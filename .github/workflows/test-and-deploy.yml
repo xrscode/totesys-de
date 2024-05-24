@@ -38,9 +38,6 @@ jobs:
               env: 
                AWS_ECR: ${{secrets.AWS_ECR}}
               run: python .github/workflows/setup.py
-              
-            - name: Create lambda_functions ECR Repository
-              run: aws ecr create-repository --repository-name lambda_functions
 
             - name: Authenticate AWS ECR
               run: aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin 211125534329.dkr.ecr.eu-west-2.amazonaws.com
