@@ -1,4 +1,5 @@
-FROM public.ecr.aws/lambda/python:3.12-arm64
+# FROM public.ecr.aws/lambda/python:3.12-arm64
+FROM python:3.12
 
 # Copy Requirements:
 COPY requirements.txt '.'
