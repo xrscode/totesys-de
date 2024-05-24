@@ -32,8 +32,7 @@ jobs:
 
             - name: Check if ECR repository exists
               id: check_ecr_repo
-              run: aws ecr describe-repositories --repository-names lambda_functions > /dev/null 2>&1 || exit 0
-                  echo "::set-output name=repo_exists::true"
+              run: aws ecr describe-repositories --repository-names lambda_functions > /dev/null 2>&1 || exit 0 echo "::set-output name=repo_exists::true"
               
             - name: Create ECR repository if not exists
               if: steps.check_ecr_repo.outputs.repo_exists != 'true'
