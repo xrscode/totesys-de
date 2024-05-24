@@ -5,7 +5,7 @@ import boto3
 repo = os.getenv("AWS_ECR") + '/lambda_functions'
 
 
-def check_ecr(repo_name=repo_id):
+def check_ecr(repo_name=repo):
     """
     ARGS:
     Repo ID.  The AWS account ID associated with registry.
