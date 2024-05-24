@@ -38,4 +38,4 @@ def check_ecr(repo_name=repo):
             return e
 
 
-check_ecr()
+check_ecr(repo)
