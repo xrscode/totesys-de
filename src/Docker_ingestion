@@ -12,4 +12,4 @@ COPY functions.py '.'
 
 
 # Set the handler for the Lambda function:
-CMD ["transform.handler"]
+CMD ["ingestion.handler"]
