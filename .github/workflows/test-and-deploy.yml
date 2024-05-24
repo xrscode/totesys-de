@@ -37,10 +37,12 @@ jobs:
               run: aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin 211125534329.dkr.ecr.eu-west-2.amazonaws.com
             
             - name: Create ingestion image
-              run: docker build -t 211125534329.dkr.ecr.eu-west-2.amazonaws.com/test_xrs:ingestion -f Docker_ingestion .
+              run: 
+                cd src/Docker_ingestion && docker build -t 211125534329.dkr.ecr.eu-west-2.amazonaws.com/test_xrs:ingestion -f Docker_ingestion .
 
             - name: Create transform image
-              run:  docker build -t 211125534329.dkr.ecr.eu-west-2.amazonaws.com/test_xrs:transform -f Docker_transform .
+              run:  
+               cd src/Docker_transform && docker build -t 211125534329.dkr.ecr.eu-west-2.amazonaws.com/test_xrs:transform -f Docker_transform .
 
             - name: Push ingestion to AWS ECR
               run: docker push 211125534329.dkr.ecr.eu-west-2.amazonaws.com/test_xrs:ingestion
