@@ -2,10 +2,10 @@ Connect:
 aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin 211125534329.dkr.ecr.eu-west-2.amazonaws.com
 
 Build Image:
-1: docker build -t 211125534329.dkr.ecr.eu-west-2.amazonaws.com/test_xrs:ingestion -f Docker_ingestion .
-2: docker build -t 211125534329.dkr.ecr.eu-west-2.amazonaws.com/test_xrs:transform -f Docker_transform .
+1: docker build -t 211125534329.dkr.ecr.eu-west-2.amazonaws.com/lambda_functions:ingestion -f Docker_ingestion .
+2: docker build -t 211125534329.dkr.ecr.eu-west-2.amazonaws.com/lambda_functions:transform -f Docker_transform .
 
 
 Push:
-1: docker push 211125534329.dkr.ecr.eu-west-2.amazonaws.com/test_xrs:ingestion 
-2: docker push 211125534329.dkr.ecr.eu-west-2.amazonaws.com/test_xrs:transform   
+1: docker push 211125534329.dkr.ecr.eu-west-2.amazonaws.com/lambda_functions:ingestion 
+2: docker push 211125534329.dkr.ecr.eu-west-2.amazonaws.com/lambda_functions:transform   
