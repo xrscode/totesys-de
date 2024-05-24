@@ -1,6 +1,5 @@
 import os
 import boto3
-from home.runner.work.totesys-de.totesys-de.venv import boto3
 
 # Access the AWS_ECR environment variable:
 repo = os.getenv("AWS_ECR") + '/lambda_functions'
