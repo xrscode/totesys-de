@@ -1,15 +1,4 @@
-# Deploy Transformation Lambda
-
-# Zip up transformation Lambda
-# data "archive_file" "transform_zip" {
-# # Specify type of file:
-#   type        = "zip"
-# # Specify location of file:
-#   source_file = "${path.module}/../lambdas/transform.py"
-# # Creates an output path:
-#   output_path = "${path.module}/../lambdas/transform.zip"
-# }
-
+# Deploy Transformation Lambda from AWS ECR
 # # Create the Lambda function in AWS
 # resource "aws_lambda_function" "transform_lambda" {
 # # Location of file, comes from zip.

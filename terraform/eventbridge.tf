@@ -1,6 +1,4 @@
-# Define IAM policies for EventBridge
-# Create IAM role:
-# Creates IAM Role for Lambda.
+# Create EventBridge trigger.
 # resource "aws_iam_role" "lambda_ingestion" {
 #   name = "Ingestion_EventBridge"
 #   assume_role_policy = jsonencode({
