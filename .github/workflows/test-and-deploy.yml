@@ -32,11 +32,12 @@ jobs:
 
             - name: Install boto3
               run: pip install boto3
-              env: 
-                AWS_ECR: ${{secrets.AWS_ECR}}
-          
+      
+              
             - name: Run setup.py to setup AWS ECR repository
               run: python .github/workflows/setup.py
+              
+       
 
 
             # - name: Destroy ECR
