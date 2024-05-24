@@ -2,7 +2,7 @@ import os
 import boto3
 
 # Access the AWS_ECR environment variable:
-repo = os.getenv("GITHUB_SECRET_AWS_ECR")
+repo = os.getenv("AWS_ECR")
 print(repo)
 
 
