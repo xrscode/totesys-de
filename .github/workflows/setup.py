@@ -3,7 +3,6 @@ import boto3
 
 # Access the AWS_ECR environment variable:
 repo = os.getenv("AWS_ECR")
-print(repo)
 
 
 def check_ecr(repo_name=repo):
