@@ -36,19 +36,19 @@ jobs:
             - name: Authenticate AWS ECR
               run: aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin 211125534329.dkr.ecr.eu-west-2.amazonaws.com
             
-            - name: Create Ingestion image
+            - name: Build ingestion image
               run: 
-                cd src && docker build -t 211125534329.dkr.ecr.eu-west-2.amazonaws.com/test_xrs:ingestion -f Docker_ingestion .
+                cd src && docker build -t 211125534329.dkr.ecr.eu-west-2.amazonaws.com/lambda_functions:ingestion -f Docker_ingestion .
 
-            - name: Create Transform image
+            - name: Build transform image
               run:  
-               cd src && docker build -t 211125534329.dkr.ecr.eu-west-2.amazonaws.com/test_xrs:transform -f Docker_transform .
+               cd src && docker build -t 211125534329.dkr.ecr.eu-west-2.amazonaws.com/lambda_functions:transform -f Docker_transform .
 
             - name: Push ingestion to AWS ECR
-              run: docker push 211125534329.dkr.ecr.eu-west-2.amazonaws.com/test_xrs:ingestion
+              run: docker push 211125534329.dkr.ecr.eu-west-2.amazonaws.com/lambda_functions:ingestion 
             
             - name: Push transform to AWS ECR
-              run: docker push 211125534329.dkr.ecr.eu-west-2.amazonaws.com/test_xrs:transform   
+              run: docker push 211125534329.dkr.ecr.eu-west-2.amazonaws.com/lambda_functions:transform   
 
             # - name: Deploy Terraform
             #   uses: hashicorp/setup-terraform@v3
