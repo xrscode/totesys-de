@@ -33,14 +33,14 @@ jobs:
             - name: Create ECR 
               run: aws ecr create-repository --repository-name lambda_functions
 
-            - name: authenticate AWS ECR
+            - name: Authenticate AWS ECR
               run: aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin 211125534329.dkr.ecr.eu-west-2.amazonaws.com
             
-            - name: Create ingestion image
+            - name: Create Ingestion image
               run: 
                 cd src && docker build -t 211125534329.dkr.ecr.eu-west-2.amazonaws.com/test_xrs:ingestion -f Docker_ingestion .
 
-            - name: Create transform image
+            - name: Create Transform image
               run:  
                cd src && docker build -t 211125534329.dkr.ecr.eu-west-2.amazonaws.com/test_xrs:transform -f Docker_transform .
 
