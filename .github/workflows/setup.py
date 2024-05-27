@@ -32,7 +32,7 @@ def create_ecr(repo_name=repo):
         response = client.create_repository(
             registryId=repo_name,
             repositoryName='lambda_functions')
-        return f"Status: {response['ResponseMetadata']['HTTPStatusCode']}. Repository {response['repositories'][0]['repositoryName']} created."
+        return f"Status: {response['ResponseMetadata']['HTTPStatusCode']}. Repository {response['repository']['repositoryName']} created."
 
     except ClientError as e:
         # If unable to create repository check repository already exists:
@@ -42,6 +42,7 @@ def create_ecr(repo_name=repo):
                 repositoryNames=[
                     'lambda_functions',
                 ])
+
             return f"Status: {response['ResponseMetadata']['HTTPStatusCode']}.  Repository: {response['repositories'][0]['repositoryName']} already exists."
         else:
             # If unable to check repository exists raise error:
@@ -79,3 +80,6 @@ def id_to_parameter_store(string):
 
 create_ecr(repo)
 id_to_parameter_store(account_id)
+
+# create_ecr('lambda_functions')
+# id_to_parameter_store('211125534329')

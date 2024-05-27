@@ -31,3 +31,13 @@ resource "aws_ssm_parameter" "backup_files" {
   type  = "String"
   value = "{}"  
 }
+
+# Retrieve account ID from Secret Store:
+data "aws_secretsmanager_secret" "account_id"{
+  name = "account_id_two"
+}
+
+# Retrieve secret Value:
+data "aws_secretsmanager_secret_version" "account_id_value"{
+  secret_id = data.aws_secretsmanager_secret.account_id.id
+}

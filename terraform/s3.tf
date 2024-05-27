@@ -6,38 +6,6 @@ resource "aws_s3_bucket" "ingestion" {
     force_destroy = true
 }
 
-# Create permission for S3 bucket to invoke Lambda function:
-# resource "aws_lambda_permission" "allow_s3_invoke" {
-#     # Unique identifier for permission statement:
-#     statement_id = "AllowS3Invoke"
-#     # Specifies action being allowed:
-#     action = "lambda:InvokeFunction"
-#     # Resolves to 'transform':
-#     function_name = aws_lambda_function.transform_lambda.function_name
-#     # Amazon S3 given permission to invoke lambda function:
-#     principal = "s3.amazonaws.com"
-#     # Specifies unique identifier:
-#     source_arn = aws_s3_bucket.ingestion.arn
-# }
-
-# Create the S3 notification property for S3 Ingestion bucket:
-# resource "aws_s3_bucket_notification" "bucket_notification" {
-#     # Specifies the bucket name:
-#   bucket = aws_s3_bucket.ingestion.bucket
-
-#     # References the lambda to be notified:
-#   lambda_function {
-#     # References the transformation lambda:
-#     lambda_function_arn = aws_lambda_function.transform_lambda.arn
-#     # Specify which event for notification:
-#     events              = ["s3:ObjectCreated:Put"]
-#   }
-#     # Ensures permissions and transform lambda are setup first!
-#   depends_on = [
-#     aws_lambda_permission.allow_s3_invoke, 
-#     aws_lambda_function.transform_lambda
-#     ]
-# }
 
 # Creates Process Bucket:
 resource "aws_s3_bucket" "process" {
