@@ -11,7 +11,7 @@ resource "aws_lambda_function" "transform_lambda" {
   package_type = "Image"
 
 # Set URI to AWS ECR location:
-  image_uri = "${jsondecode(data.aws_secretsmanager_secret_version.account_id_value.secret_string)["my_secret_string"]}.dkr.ecr.eu-west-2.amazonaws.com/lambda_functions:ingestion"
+  image_uri = "${jsondecode(data.aws_secretsmanager_secret_version.account_id_value.secret_string)["my_secret_string"]}.dkr.ecr.eu-west-2.amazonaws.com/lambda_functions:transform"
 
 # Define timeout time (seconds) for Lambda fucntion to run:
   timeout = 180
