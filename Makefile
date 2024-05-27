@@ -45,8 +45,7 @@ requirements: create-environment
 # ## Run the flake8 code check
 run-flake:
 	$(call execute_in_env, flake8  ./src/*.py)
-
-# ./test/*/test_*.py ./src/*.py ./test/test_*.py
+	# ./test/*/test_*.py ./src/*.py ./test/test_*.py
 
 # run-autopep:
 # 	$(call execute_in_env, autopep8  ./src/*/*.py ./test/*/test_*.py ./src/*.py ./test/test_*.py)

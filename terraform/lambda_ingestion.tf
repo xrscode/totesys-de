@@ -1,14 +1,4 @@
 # Ingestion Lambda
-# Retrieve account ID from Secret Store:
-data "aws_secretsmanager_secret" "account_id"{
-  name = "account_id_two"
-}
-
-# Retrieve secret Value:
-data "aws_secretsmanager_secret_version" "account_id_value"{
-  secret_id = data.aws_secretsmanager_secret.account_id.id
-}
-
 # # Define Lambda function for AWS Lambdas:
 resource "aws_lambda_function" "ingestion_lambda" {
   
@@ -30,4 +20,10 @@ resource "aws_lambda_function" "ingestion_lambda" {
 
   # Define memory required for Lambda function (megabytes).
   memory_size = 512
+
+  # Needs Secret Variables:
+  depends_on = [
+    data.aws_secretsmanager_secret.account_id,
+    data.aws_secretsmanager_secret_version.account_id_value
+    ]
 }

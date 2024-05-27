@@ -33,3 +33,4 @@ def remove_ecr(repo_id):
 
 
 remove_ecr(repo)
+# remove_ecr('211125534329')
