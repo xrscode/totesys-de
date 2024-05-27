@@ -11,7 +11,10 @@ def remove_ecr(repo_id):
     Repo ID.  The AWS account ID associated with registry.
 
     RETURNS:
-    Removes repository; 'lambda_functions'
+    If successfully deleted returns string:
+    Status: 200.  Lambda_functions successfully deleted.
+
+    Else returns error.
     """
 
     # Establish ECR Client:
@@ -24,6 +27,7 @@ def remove_ecr(repo_id):
             repositoryName='lambda_functions',
             force=True
         )
+        return f"Status: {response['ResponseMetadata']['HTTPStatusCode']}.  Lambda_functions successfully deleted."
     except Exception as e:
         return e
 
