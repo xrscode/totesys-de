@@ -11,31 +11,25 @@ def check_ecr(repo_name=repo):
     Repo ID.  The AWS account ID associated with registry.
 
     RETURNS:
-    Checks if repository 'lambda_functions' exists. 
-    If it exists, returns status code 200. 
-    If repository does not exist, creates repository 'lambda_functions'.
-    Returns status code 200.
+    Status 200 code if repository created. 
+    Status 200 code if repository already exists.
     """
 
     # Establish ECR Client:
     client = boto3.client('ecr')
-
-    # Check if repository exists:
+    # Attempt to create repository:
     try:
+        response = client.create_repository(
+            registryId=repo_name,
+            repositoryName='lambda_functions')
+        return f"Status: {response['ResponseMetadata']['HTTPStatusCode']}. Repository 'lambda_functions' created."
+
+    except Exception as e:
         response = response = client.describe_repositories(
             registryId=repo_name,
             repositoryNames=[
                 'lambda_functions',
             ])
-        return f"Lambda_functions already exists."
-    except Exception as e:
-        try:
-            response = client.create_repository(
-                registryId=repo_name,
-                repositoryName='lambda_functions')
-            return f"Status: {response['ResponseMetadata']['HTTPStatusCode']}. Repository 'lambda_functions' created."
-        except Exception as e:
-            return e
 
 
 check_ecr(repo)
