@@ -9,23 +9,28 @@ import logging
 import pandas as pd
 
 
-def get_secret():
-    secret_name = "totesysDatabase"
-    region_name = "eu-west-2"
-    # Create a Secrets Manager client
-    session = boto3.session.Session()
-    client = session.client(
-        service_name='secretsmanager',
-        region_name=region_name
-    )
+def get_totesys_details():
+    """
+    Args: None
+
+    Returns: JSON object with database credentials
+    for totesys database.
+    """
+    secret_name = "psql"
+    parameter_name = "db_endpoint"
+    client_secret = boto3.client('secretsmanager')
+    client_parameter = boto3.client('ssm')
     try:
-        get_secret_value_response = client.get_secret_value(
-            SecretId=secret_name
-        )
+        password = client_secret.get_secret_value(SecretId=secret_name)
+        db_cred = client_parameter.get_parameter(Name=parameter_name)
+
     except ClientError as e:
+        print('HERE')
         raise e
-    secret = get_secret_value_response['SecretString']
-    return secret
+    db_endpoint = db_cred['Parameter']['Value'][:-5]
+    conn = {'password': password['SecretString'],
+            'host': db_endpoint, 'port': 5432, 'database': 'totesys', 'user': 'postgres'}
+    return conn
 
 
 def get_bucket_names():
@@ -125,12 +130,12 @@ def all_data():
                   'transaction': None}
 
     # Establish a connection to the PostgreSQL database
-    dbCred = json.loads(get_secret())
+    dbCred = get_totesys_details()
     con = pg8000.connect(
         host=dbCred['host'],
         port=dbCred['port'],
-        database=dbCred['dbname'],
-        user=dbCred['username'],
+        database=dbCred['database'],
+        user=dbCred['user'],
         password=dbCred['password']
     )
     data = {}
@@ -313,13 +318,13 @@ def dim_counterparty(file):
     """
     Args:
     This function accepts a JSON file.
-    The JSON should not be in string format. 
+    The JSON should not be in string format.
 
     Returns:
     If no dim_counterparty dataframe in 'process' bucket, creates
-    dim_counterparty dataframe and populates with updated data. 
+    dim_counterparty dataframe and populates with updated data.
 
-    If dataframe exists already, populates with new data. 
+    If dataframe exists already, populates with new data.
     """
 
     # Exit function if not enough data provided:

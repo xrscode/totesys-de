@@ -1,6 +1,8 @@
 Connect:
 aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin 211125534329.dkr.ecr.eu-west-2.amazonaws.com
 
-Build and push images:
+Build and push images (LOCAL ONLY):
 
-docker build -t 211125534329.dkr.ecr.eu-west-2.amazonaws.com/lambda_functions:ingestion -f Docker_ingestion . && docker build -t 211125534329.dkr.ecr.eu-west-2.amazonaws.com/lambda_functions:transform -f Docker_transform . && docker push 211125534329.dkr.ecr.eu-west-2.amazonaws.com/lambda_functions:ingestion && docker push 211125534329.dkr.ecr.eu-west-2.amazonaws.com/lambda_functions:transform
+docker build --platform linux/amd64 -t 211125534329.dkr.ecr.eu-west-2.amazonaws.com/lambda_functions:ingestion -f Docker_ingestion . &&docker build --platform linux/amd64 -t 211125534329.dkr.ecr.eu-west-2.amazonaws.com/lambda_functions:transform -f Docker_transform . && 
+docker push 211125534329.dkr.ecr.eu-west-2.amazonaws.com/lambda_functions:ingestion && 
+docker push 211125534329.dkr.ecr.eu-west-2.amazonaws.com/lambda_functions:transform

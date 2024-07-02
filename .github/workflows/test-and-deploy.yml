@@ -35,7 +35,6 @@ jobs:
       
             - name: Run setup.py to setup AWS ECR repository
               env: 
-               AWS_ECR: ${{ secrets.AWS_ECR}}
                AWS_USER_ACCOUNT_ID: ${{ secrets.AWS_USER_ACCOUNT_ID }}
               run: python .github/workflows/setup.py
 

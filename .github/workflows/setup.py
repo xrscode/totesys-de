@@ -4,11 +4,10 @@ from botocore.exceptions import ClientError
 import json
 
 # Access the AWS_ECR environment variable:
-repo = os.getenv("AWS_ECR")
 account_id = os.getenv("AWS_USER_ACCOUNT_ID")
 
 
-def create_ecr(repo_name=repo):
+def create_ecr(repo_name=account_id):
     """
     ARGS:
     String: Amazon account ID number.
@@ -78,8 +77,11 @@ def id_to_parameter_store(string):
             raise
 
 
-create_ecr(repo)
+# ONLINE:
+create_ecr(account_id)
 id_to_parameter_store(account_id)
 
-# create_ecr('lambda_functions')
+
+# OFFLINE:
+# create_ecr('211125534329')
 # id_to_parameter_store('211125534329')
