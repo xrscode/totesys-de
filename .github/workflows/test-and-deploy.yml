@@ -33,28 +33,14 @@ jobs:
             - name: Install boto3
               run: pip install boto3
 
-            - name: Deploy Terraform
-              uses: hashicorp/setup-terraform@v3
-            
-            - name: Terraform Init
-              working-directory: terraform
-              run: terraform init
+              
+            - name: Run setup.py to setup AWS ECR repository
+              env: 
+               AWS_USER_ACCOUNT_ID: ${{ secrets.AWS_USER_ACCOUNT_ID }}
+              run: python .github/workflows/setup.py
 
-            - name: Terraform Plan
-              working-directory: terraform
-              run: terraform plan
-
-            - name: Terraform Apply
-              working-directory: terraform
-              run: terraform apply -auto-approve
-      
-            # - name: Run setup.py to setup AWS ECR repository
-            #   env: 
-            #    AWS_USER_ACCOUNT_ID: ${{ secrets.AWS_USER_ACCOUNT_ID }}
-            #   run: python .github/workflows/setup.py
-
-            # - name: Authenticate AWS ECR
-            #   run: aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin ${{ secrets.AWS_USER_ACCOUNT_ID }}.dkr.ecr.eu-west-2.amazonaws.com
+            - name: Authenticate AWS ECR
+              run: aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin ${{ secrets.AWS_USER_ACCOUNT_ID }}.dkr.ecr.eu-west-2.amazonaws.com
             
             - name: Build ingestion image
               run: 
@@ -70,20 +56,20 @@ jobs:
             - name: Push transform to AWS ECR
               run: docker push ${{secrets.AWS_USER_ACCOUNT_ID}}.dkr.ecr.eu-west-2.amazonaws.com/lambda_functions:transform   
 
-            # - name: Deploy Terraform
-            #   uses: hashicorp/setup-terraform@v3
+            - name: Deploy Terraform
+              uses: hashicorp/setup-terraform@v3
             
-            # - name: Terraform Init
-            #   working-directory: terraform
-            #   run: terraform init
+            - name: Terraform Init
+              working-directory: terraform
+              run: terraform init
 
-            # - name: Terraform Plan
-            #   working-directory: terraform
-            #   run: terraform plan
+            - name: Terraform Plan
+              working-directory: terraform
+              run: terraform plan
 
-            # - name: Terraform Apply
-            #   working-directory: terraform
-            #   run: terraform apply -auto-approve
+            - name: Terraform Apply
+              working-directory: terraform
+              run: terraform apply -auto-approve
 
             # - name: Terraform Destroy
             #   working-directory: terraform
