@@ -29,7 +29,7 @@ def get_totesys_details():
         raise e
     db_endpoint = db_cred['Parameter']['Value'][:-5]
     conn = {'password': password['SecretString'],
-            'host': db_endpoint, 'port': 5432, 'database': 'totesys', 'user': 'postgres'}
+            'host': db_endpoint, 'port': 5432, 'user': 'postgres'}
     return conn
 
 
@@ -131,13 +131,8 @@ def all_data():
 
     # Establish a connection to the PostgreSQL database
     dbCred = get_totesys_details()
-    con = pg8000.connect(
-        host=dbCred['host'],
-        port=dbCred['port'],
-        database=dbCred['database'],
-        user=dbCred['user'],
-        password=dbCred['password']
-    )
+
+    con = pg8000.connect(**dbCred)
     data = {}
     # Iterate through table_dict
     for table in table_dict:
@@ -146,28 +141,28 @@ def all_data():
         query = (f"SELECT * FROM {table} "
                  f"WHERE last_updated > '{last_query_time}';")
         cursor.execute(query)
-        # Establish names of columns
+    # Establish names of columns
         column_names = [col_desc[0] for col_desc in cursor.description]
         rows = con.run(query)
         list = []
-        # Iterate through each ROW.
+    # Iterate through each ROW.
         for row in rows:
             # Create temp dictionary
             temp = {}
-            # Iterate through data in each row:
+        # Iterate through data in each row:
             for i, x in enumerate(row):
                 # Add to my_row dictionary: column name (i).
                 # Value is (x)
                 temp[column_names[i]] = x
-            # Append dictionary to list.
+        # Append dictionary to list.
             list.append(temp)
-        # Add to dictionary.  Table name is key.  List is value.
-        data[table] = list
+    # Add to dictionary.  Table name is key.  List is value.
+    data[table] = list
     con.close()
     # Convert into a JSON string:
     json_str = json.dumps(data, default=str, indent=2)
     # Update AWS time to set time of 'last update':
-    update_aws_time(datetime.now())
+    # update_aws_time(datetime.now())
     return json_str
 
 
@@ -271,44 +266,45 @@ def create_path_add_file(file, bucket_name=get_bucket_names()['ingestion']):
 
 
 # Functions for Transformation Lambda:
-# def process_write(event):
-#     logger = logging.getLogger()
-#     logger.setLevel(logging.INFO)
+def process_write(event):
+    logger = logging.getLogger()
+    logger.setLevel(logging.INFO)
 
-#     try:
-#         # Log the incoming event
-#         logger.info("Received event: %s", json.dumps(event, indent=2))
+    try:
+        # Log the incoming event
+        logger.info("Received event: %s", json.dumps(event, indent=2))
 
-#         s3 = boto3.client('s3')
+        s3 = boto3.client('s3')
 
-#         # Discover new file location:
-#         bucket_name = event['Records'][0]['s3']['bucket']['name']
-#         file = event['Records'][0]['s3']['object']['key']
+        # Discover new file location:
+        bucket_name = event['Records'][0]['s3']['bucket']['name']
+        file = event['Records'][0]['s3']['object']['key']
 
-#         # Access the data from ingestion bucket:
-#         data = json.loads(s3.get_object(
-#             Bucket=bucket_name, Key=file)['Body'].read())
+        # Access the data from ingestion bucket:
+        data = json.loads(s3.get_object(
+            Bucket=bucket_name, Key=file)['Body'].read())
 
-#         # Access data:
-#         # Access name of to write to. :
-#         process_bucket_name = get_bucket_names()['process']
-#         # Extract data
-#         counterparty = json.dumps(data['counterparty'])
+        # Access data:
+        # Access name of process bucket to write to:
+        process_bucket_name = get_bucket_names()['process']
+        # Extract data
+        counterparty = json.dumps(data['counterparty'])
 
-#         # Write to S3 bucket; 'process'.
-#         response = s3.put_object(Body=counterparty, Bucket=process_bucket_name,
-#                                  Key='Counterparty Data')
+        # Write to S3 bucket; 'process'.
+        response = s3.put_object(Body=counterparty, Bucket=process_bucket_name,
+                                 Key='Counterparty Data')
 
-    #     # Handle response status code.  Check for write success:
-    #     if response['ResponseMetadata']['HTTPStatusCode'] == 200:
-    #         return {'status': 'Success', 'message': 'Object added!'}
-    #     else:
-    #         return {'status': 'Failed', 'message': 'Object not added!', 'bucket_name': bucket_name, 'key': file, 'response': response}
-    # except Exception as e:
-    #     return {'Status': 'Error', 'message': str(e)}
+    # Handle response status code.  Check for write success:
+        if response['ResponseMetadata']['HTTPStatusCode'] == 200:
+            return {'status': 'Success', 'message': 'Object added!'}
+        else:
+            return {'status': 'Failed', 'message': 'Object not added!', 'bucket_name': bucket_name, 'key': file, 'response': response}
+    except Exception as e:
+        return {'Status': 'Error', 'message': str(e)}
 
-# with open('././files/dbdata.json') as file:
-#     temp_data = json.loads(file.read())
+
+with open('././files/dbdata.json') as file:
+    temp_data = json.loads(file.read())
 
 
 def dim_counterparty(file):
