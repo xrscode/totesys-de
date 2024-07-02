@@ -8,6 +8,10 @@ from pprint import pprint
 import logging
 import pandas as pd
 
+# Temporary Data for Development:
+# with open('././files/dbdata.json') as file:
+#     temp_data = json.loads(file.read())
+
 
 def get_totesys_details():
     """
@@ -162,7 +166,7 @@ def all_data():
     # Convert into a JSON string:
     json_str = json.dumps(data, default=str, indent=2)
     # Update AWS time to set time of 'last update':
-    # update_aws_time(datetime.now())
+    update_aws_time(datetime.now())
     return json_str
 
 
@@ -303,10 +307,6 @@ def process_write(event):
         return {'Status': 'Error', 'message': str(e)}
 
 
-with open('././files/dbdata.json') as file:
-    temp_data = json.loads(file.read())
-
-
 def dim_counterparty(file):
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
@@ -335,7 +335,7 @@ def dim_counterparty(file):
     key = '/counterparty'
 
     # Create dim_counterparty Object
-    dim_counterparty_obj = {'dim_counterparty': []}
+    dim_counterparty = []
 
     for record in counterparty:
         schema = {'counterparty_id': record['counterparty_id'],
@@ -355,10 +355,11 @@ def dim_counterparty(file):
                 schema['counterparty_legal_phone_number'] = str(item['phone'])
 
                 break
-        dim_counterparty_obj['dim_counterparty'].append(schema)
+        dim_counterparty.append(schema)
     try:
         # Convert to Pandas Data Frame:
-        df = pd.DataFrame(data=dim_counterparty_obj)
+        df = pd.DataFrame(data=dim_counterparty)
+        print(df)
         print('Pandas Data Frame created for dim_counterparty.')
     except Exception as e:
         return e
@@ -371,3 +372,39 @@ def dim_counterparty(file):
 
     except Exception as e:
         return {'Status': 'dim_counterparty not added', 'message': str(e)}
+
+
+def dim_currency(file):
+    # Establish name of process Bucket:
+    bucket_name = get_bucket_names()['process']
+    # New Currency Dictionary:
+    cur_list = []
+    # Iterate through currency
+    for currency in file['currency']:
+        # Dictionary for currency code lookup:
+        currency_code = {'GBP': 'British Pound',
+                         'USD': 'US Dollar', 'EUR': 'Euros'}
+        temp_dict = {
+            # Convert ID to integer:
+            'currency_id': int(currency['currency_id']),
+            # Convert Code to String:
+            'currency_code': str(currency['currency_code']),
+            # Lookup Currency Code.  Convert to string:
+            'currency_name': str(currency_code[currency['currency_code']])
+        }
+        # Append dictionary to list.
+        cur_list.append(temp_dict)
+        # Convert list into dataframe:
+        df = pd.DataFrame(data=cur_list)
+        try:
+            # Write dataframe to S3 bucket as parquet file:
+            pq = df.to_parquet(
+                f"s3://{bucket_name}/dim_currency.parquet", compression='gzip')
+        except Exception as e:
+            return {'Status': 'dim_currency not added', 'message': str(e)}
+    return df
+
+
+# CALL FUNCTIONS HERE:
+# parquet_location = './files/parquet/dim_counterparty.parquet'
+# df_counterparty = pd.read_parquet(parquet_location)
