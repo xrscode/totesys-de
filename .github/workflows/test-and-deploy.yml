@@ -23,7 +23,7 @@ jobs:
             - name: Application Requirements
               run: make requirements
 
-            - name: Implement AWS Credentials & Create ECR Repository
+            - name: Implement AWS Credentials
               uses: aws-actions/configure-aws-credentials@v4
               with:
                 aws-region: ${{ secrets.AWS_REGION }}
@@ -32,28 +32,6 @@ jobs:
 
             - name: Install boto3
               run: pip install boto3
-      
-            - name: Run setup.py to setup AWS ECR repository
-              env: 
-               AWS_USER_ACCOUNT_ID: ${{ secrets.AWS_USER_ACCOUNT_ID }}
-              run: python .github/workflows/setup.py
-
-            - name: Authenticate AWS ECR
-              run: aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin ${{ secrets.AWS_USER_ACCOUNT_ID }}.dkr.ecr.eu-west-2.amazonaws.com
-            
-            - name: Build ingestion image
-              run: 
-                cd src && docker build -t ${{ secrets.AWS_USER_ACCOUNT_ID }}.dkr.ecr.eu-west-2.amazonaws.com/lambda_functions:ingestion -f Docker_ingestion .
-
-            - name: Build transform image
-              run:  
-               cd src && docker build -t ${{ secrets.AWS_USER_ACCOUNT_ID }}.dkr.ecr.eu-west-2.amazonaws.com/lambda_functions:transform -f Docker_transform .
-
-            - name: Push ingestion to AWS ECR
-              run: docker push ${{ secrets.AWS_USER_ACCOUNT_ID }}.dkr.ecr.eu-west-2.amazonaws.com/lambda_functions:ingestion 
-            
-            - name: Push transform to AWS ECR
-              run: docker push ${{secrets.AWS_USER_ACCOUNT_ID}}.dkr.ecr.eu-west-2.amazonaws.com/lambda_functions:transform   
 
             - name: Deploy Terraform
               uses: hashicorp/setup-terraform@v3
@@ -69,15 +47,52 @@ jobs:
             - name: Terraform Apply
               working-directory: terraform
               run: terraform apply -auto-approve
+      
+            # - name: Run setup.py to setup AWS ECR repository
+            #   env: 
+            #    AWS_USER_ACCOUNT_ID: ${{ secrets.AWS_USER_ACCOUNT_ID }}
+            #   run: python .github/workflows/setup.py
 
-            - name: Terraform Destroy
-              working-directory: terraform
-              run: terraform destroy -auto-approve
+            # - name: Authenticate AWS ECR
+            #   run: aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin ${{ secrets.AWS_USER_ACCOUNT_ID }}.dkr.ecr.eu-west-2.amazonaws.com
+            
+            - name: Build ingestion image
+              run: 
+                cd src && docker build -t ${{ secrets.AWS_USER_ACCOUNT_ID }}.dkr.ecr.eu-west-2.amazonaws.com/lambda_functions:ingestion -f Docker_ingestion .
 
-            - name: Delete AWS ECR Repository
-              env: 
-                AWS_ECR: ${{ secrets.AWS_ECR }}
-              run: python .github/workflows/remove.py
+            - name: Build transform image
+              run:  
+               cd src && docker build -t ${{ secrets.AWS_USER_ACCOUNT_ID }}.dkr.ecr.eu-west-2.amazonaws.com/lambda_functions:transform -f Docker_transform .
+
+            - name: Push ingestion to AWS ECR
+              run: docker push ${{ secrets.AWS_USER_ACCOUNT_ID }}.dkr.ecr.eu-west-2.amazonaws.com/lambda_functions:ingestion 
+            
+            - name: Push transform to AWS ECR
+              run: docker push ${{secrets.AWS_USER_ACCOUNT_ID}}.dkr.ecr.eu-west-2.amazonaws.com/lambda_functions:transform   
+
+            # - name: Deploy Terraform
+            #   uses: hashicorp/setup-terraform@v3
+            
+            # - name: Terraform Init
+            #   working-directory: terraform
+            #   run: terraform init
+
+            # - name: Terraform Plan
+            #   working-directory: terraform
+            #   run: terraform plan
+
+            # - name: Terraform Apply
+            #   working-directory: terraform
+            #   run: terraform apply -auto-approve
+
+            # - name: Terraform Destroy
+            #   working-directory: terraform
+            #   run: terraform destroy -auto-approve
+
+            # - name: Delete AWS ECR Repository
+            #   env: 
+            #     AWS_ECR: ${{ secrets.AWS_ECR }}
+            #   run: python .github/workflows/remove.py
 
 
              
