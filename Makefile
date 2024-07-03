@@ -39,6 +39,8 @@ endef
 ## Build the environment requirements
 requirements: create-environment
 	$(call execute_in_env, $(PIP) install -r ./requirements.txt)
+	chmod +x ./local_dev/setup.sh
+	chmod +x ./local_dev/remove.sh
 
 ################################################################################################################
 
@@ -46,6 +48,12 @@ requirements: create-environment
 run-flake:
 	$(call execute_in_env, flake8  ./src/*.py)
 	# ./test/*/test_*.py ./src/*.py ./test/test_*.py
+
+setup-local-dev:
+	$(ACTIVATE_ENV) && ./local_dev/setup.sh
+
+remove-local-dev:
+	$(ACTIVATE_ENV) && ./local_dev/remove.sh
 
 # run-autopep:
 # 	$(call execute_in_env, autopep8  ./src/*/*.py ./test/*/test_*.py ./src/*.py ./test/test_*.py)
