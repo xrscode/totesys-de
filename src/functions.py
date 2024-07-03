@@ -8,10 +8,6 @@ from pprint import pprint
 import logging
 import pandas as pd
 
-# Temporary Data for Development:
-# with open('././files/dbdata.json') as file:
-#     temp_data = json.loads(file.read())
-
 
 def get_totesys_details():
     """
@@ -402,9 +398,95 @@ def dim_currency(file):
                 f"s3://{bucket_name}/dim_currency.parquet", compression='gzip')
         except Exception as e:
             return {'Status': 'dim_currency not added', 'message': str(e)}
-    return df
+    return 'DIM currency parquet successfully written to S3 bucket.'
 
 
-# CALL FUNCTIONS HERE:
+def dim_design(file):
+    if len(file['design']) == 0:
+        return 'No design data.'
+
+    data = file['design']
+    # Establish name of process Bucket:
+    bucket_name = get_bucket_names()['process']
+    # New list:
+    cur_list = []
+    # Iterate through data to perform transformations
+    for row in data:
+        temp_dict = {
+            'design_id': int(row['design_id']),
+            'design_name': str(row['design_name']),
+            'file_location': str(row['file_location']),
+            'file_name': str(row['file_name'])
+        }
+        # Append dictionary to cur_list
+        cur_list.append(temp_dict)
+    # Sort list by id:
+    cur_list.sort(key=lambda x: x['design_id'])
+    # Convert list into dataframe:
+    df = pd.DataFrame(data=cur_list)
+    try:
+        # Write dataframe to S3 bucket as parquet file:
+        pq = df.to_parquet(
+            f"s3://{bucket_name}/dim_design.parquet", compression='gzip')
+    except Exception as e:
+        return {'Status': 'dim_design not added', 'message': str(e)}
+
+    return 'DIM design parquet successfully written to S3 bucket.'
+
+
+def dim_location(file):
+    if len(file['address']) == 0:
+        return 'No Address data!'
+    bucket_name = get_bucket_names()['process']
+    # Save address data to variable:
+    data = file['address']
+    # Save cur_list
+    cur_list = []
+    # Iterate through address to perform transformations
+    for row in data:
+        temp_dict = {
+            'location_id': int(row['address_id']),
+            'address_line_1': str(row['address_line_1']),
+            'address_line_2': str(row['address_line_2']) if row['address_line_2'] else 'Unknown',
+            'district': str(row['district']) if row['district'] else 'Unknown',
+            'city': str(row['city']) if row['city'] else 'Unknown',
+            'postal_code': str(row['postal_code']) if row['postal_code'] else 'Unknown',
+            'country': str(row['country']) if row['country'] else 'Unknown',
+            'phone': str(row['phone']) if row['phone'] else 'Unknown'
+        }
+        # Append dictionary to list
+        cur_list.append(temp_dict)
+    # Sort list by location_id
+    cur_list.sort(key=lambda x: x['location_id'])
+    # Convert list into dataframe:
+    df = pd.DataFrame(data=cur_list)
+    # Attempt to write Parquet to S3:
+    try:
+        # Write dataframe to S3 bucket as parquet file:
+        pq = df.to_parquet(
+            f"s3://{bucket_name}/dim_location.parquet", compression='gzip')
+    except Exception as e:
+        return {'Status': 'dim_location not added', 'message': str(e)}
+    return 'DIM location parquet successfully written to S3 bucket.'
+
+
+    # CALL FUNCTIONS HERE:
+    # Temporary Data for Development:
+with open('././files/dbdata.json') as file:
+    temp_data = json.loads(file.read())
+
+# DIM COUNTERPARTY
+
+
+# DIM CURRENCY
+print(dim_currency(temp_data))
+
+# DIM DESIGN
+print(dim_design(temp_data))
+
+# DIM LOCATION
+print(dim_location(temp_data))
+
+# EXAMPLE READ PARQUET:
 # parquet_location = './files/parquet/dim_counterparty.parquet'
 # df_counterparty = pd.read_parquet(parquet_location)
