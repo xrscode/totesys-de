@@ -334,8 +334,8 @@ def dim_counterparty(file):
     dim_counterparty = []
 
     for record in counterparty:
-        schema = {'counterparty_id': record['counterparty_id'],
-                  'counterparty_legal_name': record['counterparty_legal_name']}
+        schema = {'counterparty_id': int(record['counterparty_id']),
+                  'counterparty_legal_name': str(record['counterparty_legal_name'])}
         for item in address:
             if item['address_id'] == record['legal_address_id']:
                 schema['counterparty_legal_address_line_1'] = str(
@@ -390,6 +390,8 @@ def dim_currency(file):
         }
         # Append dictionary to list.
         cur_list.append(temp_dict)
+        # Sort by currency_id
+        cur_list.sort(key=lambda x: x['currency_id'])
         # Convert list into dataframe:
         df = pd.DataFrame(data=cur_list)
         try:
@@ -470,22 +472,102 @@ def dim_location(file):
     return 'DIM location parquet successfully written to S3 bucket.'
 
 
-    # CALL FUNCTIONS HERE:
-    # Temporary Data for Development:
-with open('././files/dbdata.json') as file:
-    temp_data = json.loads(file.read())
+def dim_date(file):
+    if len(file['sales_order']) == 0:
+        return 'No data!'
+    bucket_name = get_bucket_names()['process']
+    # Save sales_order data to variable.
+    data = file['sales_order']
+    list = []
+    # Keep track of dates to prevent repeated data
+    date_list = []
+
+    for row in data:
+        date_list_one = [row['created_at'], row['last_updated']]
+        for date in date_list_one:
+            # Create date object:
+            date_obj = date_obj = datetime.strptime(date[0:10], "%Y-%m-%d")
+            # Format date_obj
+            formatted_date = int(date_obj.strftime("%Y%m%d"))
+
+            if formatted_date not in date_list:
+                date_list.append(formatted_date)
+                # BUILD UP DICTIONARY HERE!
+                temp = {'date_id': int(formatted_date), 'year': int(date_obj.strftime(
+                    "%Y")), 'month': int(date_obj.strftime("%m")), 'day': int(date_obj.strftime("%d")), 'day_of_week': int((date_obj.weekday()+1) % 7 or 7), 'day_name': str(date_obj.strftime('%A')), 'month_name': str(date_obj.strftime('%B')), 'quarter': int((date_obj.month - 1) / 3 + 1)}
+                list.append(temp)
+            else:
+                print('Date already exists continuing...')
+                continue
+    # Sort list by date_id
+    list.sort(key=lambda x: x['date_id'])
+    # Convert into dataframe:
+    df = pd.DataFrame(data=list)
+    # Attempt to write parquet to S3:
+    try:
+        # Write dataframe to S3 bucket as parquet file:
+        pq = df.to_parquet(
+            f"s3://{bucket_name}/dim_date.parquet", compression='gzip')
+    except Exception as e:
+        return {'Status': 'dim_date not added', 'message': str(e)}
+    return 'DIM date parquet successfully written to S3 bucket.'
+
+
+def dim_staff(file):
+    if len(file['staff']) == 0:
+        return 'No staff data!'
+    bucket_name = get_bucket_names()['process']
+    # Save sales_order data to variable.
+    data = file['staff']
+    department = file['department']
+    list = []
+    # Iterate through staff members
+    for staff in data:
+        dept = [dept for dept in department if dept['department_id']
+                == staff['department_id']]
+        temp = {
+            'staff_id': int(staff['staff_id']),
+            'first_name': str(staff['first_name']),
+            'last_name': str(staff['last_name']),
+            'department_name': str(dept[0]['department_name']),
+            'location': str(dept[0]['location']),
+            'email_address': str(staff['email_address']) if staff['email_address'] else 'None'
+        }
+        list.append(temp)
+    df = pd.DataFrame(data=list)
+    # Attempt to write parquet to S3:
+    try:
+        # Write dataframe to S3 bucket as parquet file:
+        pq = df.to_parquet(
+            f"s3://{bucket_name}/dim_staff.parquet", compression='gzip')
+    except Exception as e:
+        return {'Status': 'dim_staff not added', 'message': str(e)}
+    return 'DIM staff parquet successfully written to S3 bucket.'
+
+
+# CALL FUNCTIONS HERE:
+# Temporary Data for Development:
+# with open('././files/dbdata.json') as file:
+#     temp_data = json.loads(file.read())
+
 
 # DIM COUNTERPARTY
-
+# print(dim_counterparty(temp_data))
 
 # DIM CURRENCY
-print(dim_currency(temp_data))
+# print(dim_currency(temp_data))
 
 # DIM DESIGN
-print(dim_design(temp_data))
+# print(dim_design(temp_data))
 
 # DIM LOCATION
-print(dim_location(temp_data))
+# print(dim_location(temp_data))
+
+# DIM DATE
+# print(dim_date(temp_data))
+
+# DIM STAFF
+# print(dim_staff(temp_data))
 
 # EXAMPLE READ PARQUET:
 # parquet_location = './files/parquet/dim_counterparty.parquet'
